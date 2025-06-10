@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Salle - Portal Estudiantil</title>
+    <style>
+        /* Estilos generales */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            /* La imagen de fondo para todo el cuerpo */
+            background-image: url('Captura de pantalla 2025-06-04 082423.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+        }
+
+        /* Estilos del encabezado compartido */
+        .header {
+            background: linear-gradient(135deg, #f4a634, #e89611);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .logo {
+            font-weight: bold;
+            font-size: 18px; /* Ajustado para el dashboard */
+        }
+
+        .breadcrumb {
+            font-size: 14px;
+            opacity: 0.9;
+            display: none; /* Inicialmente oculto para el dashboard */
+        }
+
+        .user-btn {
+            background: #2196F3;
+            border: none;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Estilos del contenedor principal (para ambos views) */
+        .container {
+            max-width: 1400px; /* Ajustado para el dashboard */
+            margin: 0 auto;
+            padding: 30px 20px; /* Ajustado para el dashboard */
+            background: rgba(255, 255, 255, 0.9); /* Ligera transparencia para el fondo */
+            min-height: calc(100vh - 70px);
+            box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Sombra para resaltar sobre el fondo */
+        }
+
+        /* Estilos específicos del Dashboard */
+        .dashboard-nav-item {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .dashboard-nav-item:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .dashboard-user-icon {
+            width: 35px;
+            height: 35px;
+            background: #4285f4;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .dashboard-user-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #f4b942, #e89c25);
+        }
+
+        .card-icon {
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, #f4b942, #e89c25);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .card-subtitle {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .card-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #f4b942;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .status-text {
+            font-size: 14px;
+            color: #888;
+        }
+
+        /* Iconos SVG */
+        .icon {
+            width: 18px;
+            height: 18px;
+            fill: white;
+        }
+
+        /* Animaciones para cards del dashboard */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+        .card:nth-child(4) { animation-delay: 0.4s; }
+        .card:nth-child(5) { animation-delay: 0.5s; }
+        .card:nth-child(6) { animation-delay: 0.6s; }
+        .card:nth-child(7) { animation-delay: 0.7s; }
+        .card:nth-child(8) { animation-delay: 0.8s; }
+        .card:nth-child(9) { animation-delay: 0.9s; }
+        .card:nth-child(10) { animation-delay: 1.0s; }
+
+        /* Estilos específicos de Mis Resultados y Promedios */
+        #misResultadosView, #promediosView, #subjectDetailView {
+            display: none; /* Inicialmente oculto */
+        }
+
+        .results-nav-header {
+            padding: 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .results-nav-back {
+            background: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .program-info {
+            padding: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .program-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dropdown-icon {
+            background: #f4a634;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .program-type {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .results-section {
+            padding: 20px;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .results-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .filter-btn {
+            background: none;
+            border: none;
+            color: #f4a634;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th {
+            background: #f8f9fa;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+            color: #666;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+        }
+
+        .year-cell {
+            font-weight: 600;
+            background: #f8f9fa;
+        }
+
+        .semester-cell, .period-cell { /* Added period-cell for Promedios */
+            font-weight: 500;
+            color: #666;
+            background: #fafafa;
+        }
+
+        .course-row, .promedio-row { /* Added promedio-row */
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .course-row:hover, .promedio-row:hover {
+            background-color: #f8f9fa;
+        }
+
+        .status-inscrito {
+            color: #f4a634;
+            font-weight: 500;
+        }
+
+        .status-cerrado {
+            color: #4caf50;
+            font-weight: 500;
+        }
+
+        .status-finalizado {
+            color: #f44336;
+            font-weight: 500;
+        }
+
+        .grade {
+            font-weight: 600;
+        }
+
+        .grade-success {
+            color: #4caf50;
+        }
+
+        .grade-danger {
+            color: #f44336;
+        }
+
+        .arrow {
+            color: #ccc;
+            font-size: 12px;
+        }
+
+        /* Estilos del botón de exportar */
+        .export-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #f4a634;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(244, 166, 52, 0.3);
+        }
+
+        /* Vista de Detalle de Asignatura */
+        .subject-detail {
+            display: none;
+            padding: 20px;
+            background: transparent; /* Fondo transparente para mostrar la imagen de fondo de body */
+        }
+
+        .subject-detail.active {
+            display: block;
+        }
+
+        .subject-overview {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+        }
+
+        .subject-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            flex-basis: 100%;
+        }
+
+        .subject-grade-status {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            margin-bottom: 10px;
+        }
+
+        .final-grade-display {
+            font-size: 28px;
+            font-weight: 700;
+            color: #4caf50;
+            margin-bottom: 5px;
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .subject-info-stacked {
+            flex-basis: 100%;
+            font-size: 14px;
+            color: #666;
+            margin-top: -15px;
+            margin-bottom: 20px;
+        }
+
+        .info-item {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .grades-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .grades-table {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .grade-row {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .grade-row.header-row {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #666;
+            font-size: 13px;
+        }
+
+        .grade-row:last-child {
+            border-bottom: none;
+        }
+
+        .grade-type {
+            flex: 2;
+            font-weight: 500;
+        }
+        .grade-value-header, .grade-fill-header {
+            flex: 1;
+            text-align: center;
+        }
+
+        .grade-value {
+            flex: 1;
+            text-align: center;
+            font-weight: 600;
+            margin: 0 10px;
+        }
+
+        .grade-weight {
+            flex: 0.7;
+            text-align: right;
+            color: #666;
+            font-size: 13px;
+        }
+
+        .progress-bar {
+            flex: 1.5;
+            height: 8px;
+            background: transparent;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 0 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #4caf50;
+            transition: width 0.3s ease;
+        }
+
+        .final-grade {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .transversal-section {
+            margin-bottom: 30px;
+        }
+
+        .no-data {
+            text-align: center;
+            color: #999;
+            font-style: italic;
+            padding: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 20px 15px;
+            }
+            
+            .header {
+                padding: 12px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-left">
+            <button class="back-btn" onclick="goBackFromCurrentView()" style="display: none;">‹</button>
+            <div class="logo" id="headerLogo">LA SALLE</div>
+            <div class="breadcrumb" id="headerBreadcrumb" style="display: none;"></div>
+        </div>
+        <button class="user-btn">👤</button>
+    </header>
+
+    <div class="container">
+        <!-- Dashboard View -->
+        <div id="dashboardView">
+            <div class="dashboard-grid">
+                <div class="card">
+                    <div class="card-icon">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                    </div>
+                    <div class="card-title">Mis datos personales</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                        </svg>
+                    </div>
+                    <div class="card-title">Inscripción a titulación</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.91s4.18 1.39 4.18 3.91c-.01 1.83-1.38 2.83-3.12 3.16z"/>
+                        </svg>
+                    </div>
+                    <div class="card-title">Mis Pagos</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+                        </svg>
+                    </div>
+                    <div class="card-title">Registrar cursos nuevos</div>
+                    <div class="card-subtitle">Anual 2025</div>
+                    <div class="card-value">
+                        ⊞ <span class="status-text">Registro abierto</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                    </div>
+                    <div class="card-title">Cambio Cursos registrados</div>
+                    <div class="card-subtitle">Anual 2025</div>
+                    <div class="card-value">
+                        ⊞ 0 <span class="status-text">Cursos</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                    </div>
+                    <div class="card-title">Llevar un seguimiento de mis requisitos de...</div>
+                    <div class="card-value">
+                        ⊞ ... <span class="status-text">Créditos</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h8c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                        </svg>
+                    </div>
+                    <div class="card-title">Guía Matrícula posgrado</div>
+                    <div class="card-subtitle">Visualiza textos y si...</div>
+                </div>
+
+                <div class="card" onclick="showPromediosView()">
+                    <div class="card-icon">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/>
+                        </svg>
+                    </div>
+                    <div class="card-title">Promedios</div>
+                </div>
+
+                <div class="card" onclick="showMisResultadosView()">
+                    <div class="card-icon">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path d="M7 14l5-5 5 5z"/>
+                        </svg>
+                    </div>
+                    <div class="card-title">Mis Resultados</div>
+                    <div class="card-value">🔍 ...</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/>
+                        </svg>
+                    </div>
+                    <div class="card-title">Estado de cuenta</div>
+                    <div class="card-value">$ 0,00</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+                        </svg>
+                    </div>
+                    <div class="card-title">Oferta Académica</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h8c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                        </svg>
+                    </div>
+                    <div class="card-title">Reporte de Estudio Académico</div>
+                    <div class="card-subtitle">Visualiza textos y si...</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
+                            <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                        </svg>
+                    </div>
+                    <div class="card-title">Mi horario</div>
+                    <div class="card-subtitle">Visualiza Horario</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h8c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                        </svg>
+                    </div>
+                    <div class="card-title">Solicitudes Académicas</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
+                            <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                        </svg>
+                    </div>
+                    <div class="card-title">Consulta Turno: Prematrícula / Generación Guía</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mis Resultados View -->
+        <div id="misResultadosView">
+            <div class="results-nav-header">
+                <button class="results-nav-back" onclick="showDashboardView()">‹</button>
+                <span>Mis resultados</span>
+            </div>
+
+            <div class="program-info">
+                <div class="program-title">
+                    ARQUITECTURA_SIA6
+                    <div class="dropdown-icon">v</div>
+                </div>
+                <div class="program-type">Tipo de programa: PROPRARQUI07</div>
+            </div>
+
+            <div class="results-section">
+                <div class="results-header">
+                    <div class="results-title">Resultados del curso (21)</div>
+                    <button class="filter-btn">🔽</button>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Año académico</th>
+                                <th>Sesión</th>
+                                <th>Nombre del curso</th>
+                                <th>Resultado</th>
+                                <th>Créditos</th>
+                                <th>Estado</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="year-cell">
+                                <td><strong>2025</strong></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr class="semester-cell">
+                                <td></td>
+                                <td><strong>I Período Semestral</strong></td>
+                                <td></td>
+                                <td></td>
+                                <td><strong>17</strong></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr class="course-row" onclick="showSubjectDetail('CIUDAD, HISTORIA Y TEORIA')">
+                                <td></td>
+                                <td></td>
+                                <td>CIUDAD, HISTORIA Y TEORIA</td>
+                                <td class="grade grade-success">3.2</td>
+                                <td>3</td>
+                                <td class="status-cerrado">Cerrados con éxito</td>
+                                <td class="arrow">›</td>
+                            </tr>
+                            <tr class="course-row" onclick="showSubjectDetail('PLANIMETRIA ARQUITECTONICA')">
+                                <td></td>
+                                <td></td>
+                                <td>PLANIMETRIA ARQUITECTONICA</td>
+                                <td class="grade grade-success">3.8</td>
+                                <td>4</td>
+                                <td class="status-cerrado">Cerrados con éxito</td>
+                                <td class="arrow">›</td>
+                            </tr>
+                            <tr class="course-row" onclick="showSubjectDetail('SISTEMAS CONSTRUCTIVOS Y ESTRUCTURALES')">
+                                <td></td>
+                                <td></td>
+                                <td>SISTEMAS CONSTRUCTIVOS Y ESTRUCTURALES</td>
+                                <td class="grade grade-success">3.5</td>
+                                <td>3</td>
+                                <td class="status-cerrado">Cerrados con éxito</td>
+                                <td class="arrow">›</td>
+                            </tr>
+                            <tr class="course-row" onclick="showSubjectDetail('CULTURA RELIGIOSA I')">
+                                <td></td>
+                                <td></td>
+                                <td>CULTURA RELIGIOSA I</td>
+                                <td class="grade grade-success">4.1</td>
+                                <td>2</td>
+                                <td class="status-cerrado">Cerrados con éxito</td>
+                                <td class="arrow">›</td>
+                            </tr>
+                            <tr class="course-row" onclick="showSubjectDetail('TALLER EQUIPAMIENTO LOCAL')">
+                                <td></td>
+                                <td></td>
+                                <td>TALLER EQUIPAMIENTO LOCAL</td>
+                                <td class="grade grade-success">3.0</td>
+                                <td>5</td>
+                                <td class="status-cerrado">Cerrados con éxito</td>
+                                <td class="arrow">›</td>
+                            </tr>
+
+                            <tr class="year-cell">
+                                <td><strong>2024</strong></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr class="semester-cell">
+                                <td></td>
+                                <td><strong>II Período Semestral</strong></td>
+                                <td></td>
+                                <td></td>
+                                <td><strong>17</strong></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr class="course-row" onclick="showSubjectDetail('EDIFICACION SISTEMAS Y MATERIALES')">
+                                <td></td>
+                                <td></td>
+                                <td>EDIFICACION SISTEMAS Y MATERIALES</td>
+                                <td class="grade grade-success">3.3</td>
+                                <td>3</td>
+                                <td class="status-cerrado">Cerrados con éxito</td>
+                                <td class="arrow">›</td>
+                            </tr>
+                            <tr class="course-row" onclick="showSubjectDetail('HUMANIDADES II')">
+                                <td></td>
+                                <td></td>
+                                <td>HUMANIDADES II</td>
+                                <td class="grade grade-success">3.8</td>
+                                <td>2</td>
+                                <td class="status-cerrado">Cerrados con éxito</td>
+                                <td class="arrow">›</td>
+                            </tr>
+                            <tr class="course-row" onclick="showSubjectDetail('HISTORIA Y TEORIA DE ARQUIT GRAND. CULTU')">
+                                <td></td>
+                                <td></td>
+                                <td>HISTORIA Y TEORIA DE ARQUIT GRAND. CULTU</td>
+                                <td class="grade grade-success">3.5</td>
+                                <td>3</td>
+                                <td class="status-cerrado">Cerrados con éxito</td>
+                                <td class="arrow">›</td>
+                            </tr>
+                            <tr class="course-row" onclick="showSubjectDetail('VOLEIBOL')">
+                                <td></td>
+                                <td></td>
+                                <td>VOLEIBOL</td>
+                                <td class="grade grade-success">5.0</td>
+                                <td></td>
+                                <td class="status-cerrado">Cerrados con éxito</td>
+                                <td class="arrow">›</td>
+                            </tr>
+                            <tr class="course-row" onclick="showSubjectDetail('INGLES III')">
+                                <td></td>
+                                <td></td>
+                                <td>INGLES III</td>
+                                <td class="grade grade-success">3.0</td>
+                                <td>3</td>
+                                <td class="status-cerrado">Cerrados con éxito</td>
+                                <td class="arrow">›</td>
+                            </tr>
+                            <tr class="course-row" onclick="showSubjectDetail('TALLER ESPACIO DOMESTICO')">
+                                <td></td>
+                                <td></td>
+                                <td>TALLER ESPACIO DOMESTICO</td>
+                                <td class="grade grade-success">3.0</td>
+                                <td>6</td>
+                                <td class="status-cerrado">Cerrados con éxito</td>
+                                <td class="arrow">›</td>
+                            </tr>
+
+                            <tr class="semester-cell">
+                                <td></td>
+                                <td><strong>I Período Semestral</strong></td>
+                                <td></td>
+                                <td></td>
+                                <td><strong>17</strong></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr class="course-row" onclick="showSubjectDetail('HUMANIDADES I')">
+                                <td></td>
+                                <td></td>
+                                <td>HUMANIDADES I</td>
+                                <td class="grade grade-success">3.4</td>
+                                <td>2</td>
+                                <td class="status-cerrado">Cerrados con éxito</td>
+                                <td class="arrow">›</td>
+                            </tr>
+                            <tr class="course-row" onclick="showSubjectDetail('INGLES II')">
+                                <td></td>
+                                <td></td>
+                                <td>INGLES II</td>
+                                <td class="grade grade-success">3.3</td>
+                                <td>3</td>
+                                <td class="status-cerrado">Cerrados con éxito</td>
+                                <td class="arrow">›</td>
+                            </tr>
+                            <tr class="course-row" onclick="showSubjectDetail('TALLER ENTORNO NATURAL Y CONSTRUIDO')">
+                                <td></td>
+                                <td></td>
+                                <td>TALLER ENTORNO NATURAL Y CONSTRUIDO</td>
+                                <td class="grade grade-success">3.7</td>
+                                <td>6</td>
+                                <td class="status-cerrado">Cerrados con éxito</td>
+                                <td class="arrow">›</td>
+                            </tr>
+                            <tr class="course-row" onclick="showSubjectDetail('MEDIO AMBIENTE Y CIUDAD')">
+                                <td></td>
+                                <td></td>
+                                <td>MEDIO AMBIENTE Y CIUDAD</td>
+                                <td class="grade grade-success">3.0</td>
+                                <td>3</td>
+                                <td class="status-cerrado">Cerrados con éxito</td>
+                                <td class="arrow">›</td>
+                            </tr>
+                            <tr class="course-row" onclick="showSubjectDetail('EDIFICACION SISTEMAS Y MATERIALES (2024 I)')">
+                                <td></td>
+                                <td></td>
+                                <td>EDIFICACION SISTEMAS Y MATERIALES</td>
+                                <td class="grade grade-danger">2.4</td>
+                                <td>3</td>
+                                <td class="status-finalizado">finalizado incorrectamente.</td>
+                                <td class="arrow">›</td>
+                            </tr>
+
+                            <tr class="year-cell">
+                                <td><strong>2023</strong></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr class="semester-cell">
+                                <td></td>
+                                <td><strong>II Período Semestral</strong></td>
+                                <td></td>
+                                <td></td>
+                                <td><strong>17</strong></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr class="course-row" onclick="showSubjectDetail('IDENTIDAD LASALLISTA')">
+                                <td></td>
+                                <td></td>
+                                <td>IDENTIDAD LASALLISTA</td>
+                                <td class="grade grade-success">3.0</td>
+                                <td>2</td>
+                                <td class="status-cerrado">Cerrados con éxito</td>
+                                <td class="arrow">›</td>
+                            </tr>
+                            <tr class="course-row" onclick="showSubjectDetail('INGLES I')">
+                                <td></td>
+                                <td></td>
+                                <td>INGLES I</td>
+                                <td class="grade grade-success">3.3</td>
+                                <td>3</td>
+                                <td class="status-cerrado">Cerrados con éxito</td>
+                                <td class="arrow">›</td>
+                            </tr>
+                            <tr class="course-row" onclick="showSubjectDetail('TALLER COMPOSICION')">
+                                <td></td>
+                                <td></td>
+                                <td>TALLER COMPOSICION</td>
+                                <td class="grade grade-success">3.4</td>
+                                <td>6</td>
+                                <td class="status-cerrado">Cerrados con éxito</td>
+                                <td class="arrow">›</td>
+                            </tr>
+                            <tr class="course-row" onclick="showSubjectDetail('HISTORIA DEL ARTE ARQUITECTURA Y DISEÑO')">
+                                <td></td>
+                                <td></td>
+                                <td>HISTORIA DEL ARTE ARQUITECTURA Y DISEÑO</td>
+                                <td class="grade grade-success">3.0</td>
+                                <td>3</td>
+                                <td class="status-cerrado">Cerrados con éxito</td>
+                                <td class="arrow">›</td>
+                            </tr>
+                            <tr class="course-row" onclick="showSubjectDetail('PERCEPCION Y REPRESENTACION GRAFICA')">
+                                <td></td>
+                                <td></td>
+                                <td>PERCEPCION Y REPRESENTACION GRAFICA</td>
+                                <td class="grade grade-success">3.5</td>
+                                <td>3</td>
+                                <td class="status-cerrado">Cerrados con éxito</td>
+                                <td class="arrow">›</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Subject Detail View -->
+        <div id="subjectDetailView">
+            <div class="results-nav-header">
+                <button class="results-nav-back" onclick="showMisResultadosView()">‹</button>
+                <span>Mis resultados</span>
+            </div>
+
+            <div class="subject-overview">
+                <h1 class="subject-title" id="subjectDetailTitle"></h1>
+                <div class="subject-grade-status">
+                    <div class="final-grade-display" id="detailFinalGrade"></div>
+                    <div class="status-badge" id="subjectDetailStatus"></div>
+                </div>
+                <div class="subject-info-stacked">
+                    <span id="subjectDetailPeriod"></span>
+                    <span id="subjectDetailCredits"></span>
+                </div>
+            </div>
+
+            <div class="grades-section">
+                <h2 class="section-title">Calificaciones</h2>
+                <div class="grades-table">
+                    <div class="grade-row header-row">
+                        <span class="grade-type">Tipo de calificación</span>
+                        <span class="grade-value-header">Resultado</span>
+                        <span class="grade-fill-header">Clasificar</span>
+                        <span class="grade-weight">Ponderación</span>
+                    </div>
+                    <!-- Las filas de calificaciones se generarán aquí dinámicamente -->
+                </div>
+            </div>
+
+            <div class="transversal-section">
+                <h2 class="section-title">Transversal</h2>
+                <div class="grades-table">
+                    <div class="grade-row">
+                        <span class="grade-type">Formador</span>
+                        <span class="grade-type">Lugar</span>
+                        <span class="grade-type">Programa</span>
+                    </div>
+                    <div class="no-data">Sin datos</div>
+                </div>
+            </div>
+
+            <div class="transversal-section">
+                <h2 class="section-title">Detalles</h2>
+                <div class="info-item" id="subjectDetails"></div>
+            </div>
+        </div>
+
+        <!-- Promedios View -->
+        <div id="promediosView">
+            <div class="results-nav-header">
+                <button class="results-nav-back" onclick="showDashboardView()">‹</button>
+                <span>Mis promedios</span>
+            </div>
+
+            <div class="program-info">
+                <div class="program-title">
+                    ARQUITECTURA_SIA6
+                    <div class="dropdown-icon">v</div>
+                </div>
+                <div class="program-type">Tipo de programa: PROPRARQUI07</div>
+            </div>
+
+            <div class="results-section">
+                <div class="results-header">
+                    <div class="results-title">Resultados del curso (14)</div>
+                    <button class="filter-btn">🔽</button>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Año académico</th>
+                                <th>Período</th>
+                                <th>Promedio</th>
+                                <th>Resultado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="promediosTableBody">
+                            <!-- Promedios se cargarán aquí -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botón de exportar a PDF -->
+    <button class="export-btn" onclick="exportToPDF()">Exportar a PDF</button>
+
+    <script>
+        // URL de la imagen de fondo para el cuerpo
+        const BACKGROUND_IMAGE_URL = 'Captura de pantalla 2025-06-04 082423.png';
+
+        // Asegurarse de que la imagen de fondo se cargue correctamente
+        document.body.style.backgroundImage = `url(${BACKGROUND_IMAGE_URL})`;
+
+        // Almacenamiento de datos de las asignaturas
+        const subjectData = {
+            'CIUDAD, HISTORIA Y TEORIA': {
+                status: 'Cerrado con éxito',
+                period: '2025, I Período Semestral',
+                credits: '3',
+                grades: { grade1: '3,0', grade2: '3,4', gradeFinal: '3,2' }
+            },
+            'PLANIMETRIA ARQUITECTONICA': {
+                status: 'Cerrado con éxito',
+                period: '2025, I Período Semestral',
+                credits: '4',
+                grades: { grade1: '3,6', grade2: '4,0', gradeFinal: '3,8' }
+            },
+            'SISTEMAS CONSTRUCTIVOS Y ESTRUCTURALES': {
+                status: 'Cerrado con éxito',
+                period: '2025, I Período Semestral',
+                credits: '3',
+                grades: { grade1: '3,3', grade2: '3,7', gradeFinal: '3,5' }
+            },
+            'CULTURA RELIGIOSA I': {
+                status: 'Cerrado con éxito',
+                period: '2025, I Período Semestral',
+                credits: '2',
+                grades: { grade1: '4,0', grade2: '4,2', gradeFinal: '4,1' }
+            },
+            'TALLER EQUIPAMIENTO LOCAL': {
+                status: 'Cerrado con éxito',
+                period: '2025, I Período Semestral',
+                credits: '5',
+                grades: { grade1: '2,9', grade2: '3,1', gradeFinal: '3,0' }
+            },
+            'EDIFICACION SISTEMAS Y MATERIALES': {
+                status: 'Cerrado con éxito',
+                period: '2024, II Período Semestral',
+                credits: '3',
+                grades: { grade1: '3,2', grade2: '3,4', gradeFinal: '3,3' }
+            },
+            'HUMANIDADES II': {
+                status: 'Cerrado con éxito',
+                period: '2024, II Período Semestral',
+                credits: '2',
+                grades: { grade1: '3,6', grade2: '4,0', gradeFinal: '3,8' }
+            },
+            'HISTORIA Y TEORIA DE ARQUIT GRAND. CULTU': {
+                status: 'Cerrado con éxito',
+                period: '2024, II Período Semestral',
+                credits: '3',
+                grades: { grade1: '3,3', grade2: '3,7', gradeFinal: '3,5' }
+            },
+            'VOLEIBOL': {
+                status: 'Cerrado con éxito',
+                period: '2024, II Período Semestral',
+                credits: '0',
+                grades: { grade1: '5,0', grade2: '5,0', gradeFinal: '5,0' }
+            },
+            'INGLES III': {
+                status: 'Cerrado con éxito',
+                period: '2024, II Período Semestral',
+                credits: '3',
+                grades: { grade1: '2,8', grade2: '3,2', gradeFinal: '3,0' }
+            },
+            'TALLER ESPACIO DOMESTICO': {
+                status: 'Cerrado con éxito',
+                period: '2024, II Período Semestral',
+                credits: '6',
+                grades: { grade1: '2,9', grade2: '3,1', gradeFinal: '3,0' }
+            },
+            'HUMANIDADES I': {
+                status: 'Cerrado con éxito',
+                period: '2024, I Período Semestral',
+                credits: '2',
+                grades: { grade1: '3,2', grade2: '3,6', gradeFinal: '3,4' }
+            },
+            'INGLES II': {
+                status: 'Cerrado con éxito',
+                period: '2024, I Período Semestral',
+                credits: '3',
+                grades: { grade1: '3,1', grade2: '3,5', gradeFinal: '3,3' }
+            },
+            'TALLER ENTORNO NATURAL Y CONSTRUIDO': {
+                status: 'Cerrado con éxito',
+                period: '2024, I Período Semestral',
+                credits: '6',
+                grades: { grade1: '3,5', grade2: '3,9', gradeFinal: '3,7' }
+            },
+            'MEDIO AMBIENTE Y CIUDAD': {
+                status: 'Cerrado con éxito',
+                period: '2024, I Período Semestral',
+                credits: '3',
+                grades: { grade1: '2,8', grade2: '3,2', gradeFinal: '3,0' }
+            },
+            'EDIFICACION SISTEMAS Y MATERIALES (2024 I)': { 
+                status: 'Finalizado incorrectamente',
+                period: '2024, I Período Semestral',
+                credits: '3',
+                grades: { grade1: '2,4', grade2: '2,8', gradeFinal: '2,4' }
+            },
+            'IDENTIDAD LASALLISTA': {
+                status: 'Cerrado con éxito',
+                period: '2023, II Período Semestral',
+                credits: '2',
+                grades: { grade1: '2,9', grade2: '3,1', gradeFinal: '3,0' }
+            },
+            'INGLES I': {
+                status: 'Cerrado con éxito',
+                period: '2023, II Período Semestral',
+                credits: '3',
+                grades: { grade1: '3,1', grade2: '3,5', gradeFinal: '3,3' }
+            },
+            'TALLER COMPOSICION': {
+                status: 'Cerrado con éxito',
+                period: '2023, II Período Semestral',
+                credits: '6',
+                grades: { grade1: '3,2', grade2: '3,6', gradeFinal: '3,4' }
+            },
+            'HISTORIA DEL ARTE ARQUITECTURA Y DISEÑO': {
+                status: 'Cerrado con éxito',
+                period: '2023, II Período Semestral',
+                credits: '3',
+                grades: { grade1: '2,8', grade2: '3,2', gradeFinal: '3,0' }
+            },
+            'PERCEPCION Y REPRESENTACION GRAFICA': {
+                status: 'Cerrado con éxito',
+                period: '2023, II Período Semestral',
+                credits: '3',
+                grades: { grade1: '3,3', grade2: '3,7', gradeFinal: '3,5' }
+            }
+        };
+
+        // Datos para la tabla de promedios
+        const promediosData = [
+            {
+                year: '2024',
+                period: '002',
+                academicAverage: '-',
+                gpaAccumulated: '3.3',
+                gpaSemester: '3.2'
+            },
+            {
+                year: '2024',
+                period: '001',
+                academicAverage: '-',
+                gpaAccumulated: '3.3',
+                gpaSemester: '3.2'
+            },
+            {
+                year: '2023',
+                period: '002',
+                academicAverage: '-',
+                gpaAccumulated: '3.3',
+                gpaSemester: '3.3'
+            }
+        ];
+
+        // Función general para ir atrás
+        function goBackFromCurrentView() {
+            if (document.getElementById('subjectDetailView').style.display === 'block') {
+                showMisResultadosView();
+            } else if (document.getElementById('misResultadosView').style.display === 'block') {
+                showDashboardView();
+            } else if (document.getElementById('promediosView').style.display === 'block') {
+                showDashboardView();
+            }
+        }
+
+        // Función para mostrar la vista del Dashboard
+        function showDashboardView() {
+            document.getElementById('dashboardView').style.display = 'block';
+            document.getElementById('misResultadosView').style.display = 'none';
+            document.getElementById('subjectDetailView').style.display = 'none';
+            document.getElementById('promediosView').style.display = 'none';
+            
+            // Actualizar elementos del header para el Dashboard
+            document.getElementById('headerLogo').textContent = 'LA SALLE';
+            document.getElementById('headerBreadcrumb').style.display = 'none';
+            document.querySelector('.header-left .back-btn').style.display = 'none';
+        }
+
+        // Función para mostrar la vista de Mis Resultados
+        function showMisResultadosView() {
+            document.getElementById('dashboardView').style.display = 'none';
+            document.getElementById('misResultadosView').style.display = 'block';
+            document.getElementById('subjectDetailView').style.display = 'none';
+            document.getElementById('promediosView').style.display = 'none';
+
+            // Actualizar elementos del header para Mis Resultados
+            document.getElementById('headerLogo').textContent = 'LA SALLE';
+            document.getElementById('headerBreadcrumb').textContent = 'Mis resultados ›';
+            document.getElementById('headerBreadcrumb').style.display = 'inline';
+            document.querySelector('.header-left .back-btn').style.display = 'inline';
+        }
+
+        /**
+         * Muestra la vista de detalle de una asignatura con sus calificaciones.
+         * @param {string} subjectName - El nombre de la asignatura.
+         */
+        function showSubjectDetail(subjectName) {
+            const data = subjectData[subjectName];
+            
+            if (!data) {
+                console.error('No se encontraron datos para la asignatura:', subjectName);
+                return;
+            }
+
+            // Actualizar encabezado de la asignatura en la vista de detalle
+            document.getElementById('subjectDetailTitle').textContent = subjectName;
+            document.getElementById('subjectDetailPeriod').textContent = data.period;
+            document.getElementById('subjectDetailCredits').textContent = data.credits + ' Horas crédito';
+            document.getElementById('subjectDetails').textContent = subjectName;
+            
+            // Actualizar la calificación final en la vista de detalle y su color
+            const finalGradeElement = document.getElementById('detailFinalGrade');
+            const finalGradeNum = parseFloat(data.grades.gradeFinal.replace(',', '.'));
+            finalGradeElement.textContent = data.grades.gradeFinal;
+            if (finalGradeNum >= 3.0) {
+                finalGradeElement.style.color = '#4caf50'; // Verde para aprobado
+            } else {
+                finalGradeElement.style.color = '#f44336'; // Rojo para no aprobado
+            }
+
+            // Actualizar la insignia de estado
+            const statusBadge = document.getElementById('subjectDetailStatus');
+            statusBadge.textContent = data.status;
+            statusBadge.className = 'status-badge'; // Reset class
+            if (data.status === 'Pendiente') {
+                statusBadge.classList.add('status-pending');
+            } else if (data.status.includes('Cerrado')) {
+                statusBadge.classList.add('status-cerrado');
+            } else if (data.status.includes('Finalizado')) {
+                statusBadge.classList.add('status-finalizado');
+            }
+            
+            // Limpiar filas de calificaciones anteriores
+            const gradesTableContainer = document.querySelector('#subjectDetailView .grades-table');
+            // Eliminar todas las filas excepto el encabezado
+            Array.from(gradesTableContainer.children).forEach(child => {
+                if (!child.classList.contains('header-row')) {
+                    gradesTableContainer.removeChild(child);
+                }
+            });
+
+            /**
+             * Crea una fila de calificación para la tabla de detalle.
+             * @param {string} type - El tipo de calificación (ej. "1er. Corte 35%").
+             * @param {string} value - El valor de la calificación.
+             * @param {string} weight - La ponderación.
+             * @param {boolean} isFinal - True si es la calificación definitiva.
+             * @returns {HTMLElement} La fila de calificación creada.
+             */
+            function createGradeRow(type, value, weight, isFinal = false) {
+                const row = document.createElement('div');
+                row.classList.add('grade-row');
+                if (isFinal) {
+                    row.classList.add('final-grade');
+                }
+
+                const valueNum = parseFloat(value.replace(',', '.'));
+                const isPassing = valueNum >= 3.0;
+                const gradeTextColorClass = isPassing ? 'grade-success' : 'grade-danger';
+
+                let progressFillWidth = 0;
+                if (valueNum > 0) {
+                    progressFillWidth = (valueNum / 5.0) * 100; // Asumiendo que la nota máxima es 5.0
+                }
+                const progressFillColor = isPassing ? '#4caf50' : '#f44336';
+
+                row.innerHTML = `
+                    <span class="grade-type">${type}</span>
+                    <span class="grade-value ${gradeTextColorClass}">${value}</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${progressFillWidth}%; background-color: ${progressFillColor};"></div>
+                    </div>
+                    <span class="grade-weight">${weight}</span>
+                `;
+
+                if (type === 'Asistencia') {
+                    row.querySelector('.progress-fill').style.width = '0%';
+                }
+
+                return row;
+            }
+
+            // Añadir filas para las calificaciones
+            gradesTableContainer.appendChild(createGradeRow('Calificación Definitiva', data.grades.gradeFinal, '100.00%', true));
+            gradesTableContainer.appendChild(createGradeRow('1er. Corte 35%', data.grades.grade1, '35.00%'));
+            gradesTableContainer.appendChild(createGradeRow('2do. Corte 35%', data.grades.grade2, '35.00%'));
+            gradesTableContainer.appendChild(createGradeRow('Examen Final 30%', data.grades.gradeFinal, '30.00%')); 
+            gradesTableContainer.appendChild(createGradeRow('Asistencia', '-', '0.00%'));
+
+            // Mostrar la vista de detalle de la asignatura
+            document.getElementById('misResultadosView').style.display = 'none';
+            document.getElementById('subjectDetailView').style.display = 'block';
+            document.getElementById('promediosView').style.display = 'none';
+
+            // Actualizar elementos del header para la vista de detalle
+            document.getElementById('headerLogo').textContent = 'LA SALLE';
+            document.getElementById('headerBreadcrumb').textContent = 'Mis resultados ›';
+            document.getElementById('headerBreadcrumb').style.display = 'inline';
+            document.querySelector('.header-left .back-btn').style.display = 'inline';
+        }
+
+        // Función para mostrar la vista de Promedios
+        function showPromediosView() {
+            document.getElementById('dashboardView').style.display = 'none';
+            document.getElementById('misResultadosView').style.display = 'none';
+            document.getElementById('subjectDetailView').style.display = 'none';
+            document.getElementById('promediosView').style.display = 'block';
+
+            // Actualizar elementos del header para Promedios
+            document.getElementById('headerLogo').textContent = 'LA SALLE';
+            document.getElementById('headerBreadcrumb').textContent = 'Mis promedios ›';
+            document.getElementById('headerBreadcrumb').style.display = 'inline';
+            document.querySelector('.header-left .back-btn').style.display = 'inline';
+
+            // Cargar datos en la tabla de promedios
+            loadPromediosTable();
+        }
+
+        // Función para cargar los datos en la tabla de promedios
+        function loadPromediosTable() {
+            const tbody = document.getElementById('promediosTableBody');
+            tbody.innerHTML = ''; // Limpiar tabla antes de cargar
+
+            let currentYear = '';
+            promediosData.forEach(data => {
+                // Añadir fila de año si cambia el año
+                if (data.year !== currentYear) {
+                    const yearRow = document.createElement('tr');
+                    yearRow.classList.add('year-cell');
+                    yearRow.innerHTML = `
+                        <td><strong>${data.year}</strong></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    `;
+                    tbody.appendChild(yearRow);
+                    currentYear = data.year;
+                }
+
+                // Fila del período
+                const periodRow = document.createElement('tr');
+                periodRow.classList.add('period-cell');
+                periodRow.innerHTML = `
+                    <td></td>
+                    <td><strong>${data.period}</strong></td>
+                    <td>— Promedio Académico —</td>
+                    <td></td>
+                `;
+                tbody.appendChild(periodRow);
+
+                // Fila de Índice Pregrado Acumulado
+                const rowAccumulated = document.createElement('tr');
+                rowAccumulated.classList.add('promedio-row');
+                rowAccumulated.innerHTML = `
+                    <td></td>
+                    <td></td>
+                    <td>Indice Pregrado Acumulado</td>
+                    <td>${data.gpaAccumulated}</td>
+                `;
+                tbody.appendChild(rowAccumulated);
+
+                // Fila de Índice Pregrado Semestral
+                const rowSemester = document.createElement('tr');
+                rowSemester.classList.add('promedio-row');
+                rowSemester.innerHTML = `
+                    <td></td>
+                    <td></td>
+                    <td>Indice Pregrado Semestral</td>
+                    <td>${data.gpaSemester}</td>
+                `;
+                tbody.appendChild(rowSemester);
+            });
+        }
+
+
+        function exportToPDF() {
+            alert('Exportando a PDF...');
+        }
+
+        // Añadir interactividad al DOMContentLoaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicialmente mostrar el Dashboard
+            showDashboardView();
+
+            // Añadir efectos hover a las tarjetas del dashboard
+            document.querySelectorAll('#dashboardView .card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.boxShadow = '0 12px 30px rgba(244, 185, 66, 0.2)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.boxShadow = '0 4px 15px rgba(0,0,0,0.08)';
+                });
+            });
+
+            // Añadir efectos hover a las filas de cursos en Mis Resultados
+            const courseRows = document.querySelectorAll('#misResultadosView .course-row');
+            courseRows.forEach(row => {
+                row.addEventListener('mouseenter', function() {
+                    this.style.backgroundColor = '#f8f9fa';
+                });
+                
+                row.addEventListener('mouseleave', function() {
+                    this.style.backgroundColor = '';
+                });
+            });
+
+            // Añadir animación de clic a las filas de cursos en Mis Resultados
+            courseRows.forEach(row => {
+                row.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.98)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 100);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
